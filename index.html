@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Media Analytics | Insightlytics</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <style>
+        .sidebar {
+            transition: all 0.3s ease;
+        }
+        .chart-container {
+            position: relative;
+            height: 300px;
+        }
+        .metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <div id="app" class="flex h-screen overflow-hidden">
+        <!-- Sidebar -->
+        <div class="sidebar bg-indigo-800 text-white w-64 flex-shrink-0">
+            <div class="p-4 border-b border-indigo-700">
+                <h1 class="text-2xl font-bold flex items-center">
+                    <i class="fas fa-chart-line mr-2"></i>
+                    Insightlytics
+                </h1>
+                <p class="text-indigo-300 text-sm mt-1">Social Media Analytics Dashboard</p>
+            </div>
+            <nav class="p-4">
+                <div class="mb-6">
+                    <h3 class="text-indigo-300 uppercase text-xs font-semibold mb-3">DASHBOARD</h3>
+                    <ul>
+                        <li class="mb-2">
+                            <a href="#" class="flex items-center p-2 rounded bg-indigo-700">
+                                <i class="fas fa-home mr-3"></i>
+                                Overview
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="#" class="flex items-center p-2 rounded hover:bg-indigo-700">
+                                <i class="fas fa-chart-pie mr-3"></i>
+                                Analytics
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="#" class="flex items-center p-2 rounded hover:bg-indigo-700">
+                                <i class="fas fa-users mr-3"></i>
+                                Audience
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="#" class="flex items-center p-2 rounded hover:bg-indigo-700">
+                                <i class="fas fa-calendar-alt mr-3"></i>
+                                Content Calendar
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="mb-6">
+                    <h3 class="text-indigo-300 uppercase text-xs font-semibold mb-3">ACCOUNTS</h3>
+                    <ul>
+                        <li class="mb-2">
+                            <a href="#" class="flex items-center p-2 rounded hover:bg-indigo-700">
+                                <i class="fab fa-instagram mr-3"></i>
+                                Instagram
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="#" class="flex items-center p-2 rounded hover:bg-indigo-700">
+                                <i class="fab fa-facebook mr-3"></i>
+                                Facebook
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="#" class="flex items-center p-2 rounded hover:bg-indigo-700">
+                                <i class="fab fa-twitter mr-3"></i>
+                                Twitter
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="#" class="flex items-center p-2 rounded hover:bg-indigo-700">
+                                <i class="fab fa-youtube mr-3"></i>
+                                YouTube
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-indigo-300 uppercase text-xs font-semibold mb-3">SETTINGS</h3>
+                    <ul>
+                        <li class="mb-2">
+                            <a href="#" class="flex items-center p-2 rounded hover:bg-indigo-700">
+                                <i class="fas fa-cog mr-3"></i>
+                                Preferences
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="#" class="flex items-center p-2 rounded hover:bg-indigo-700">
+                                <i class="fas fa-question-circle mr-3"></i>
+                                Help & Support
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 overflow-auto">
+            <!-- Header -->
+            <header class="bg-white shadow-sm p-4 flex justify-between items-center">
+                <div class="flex items-center">
+                    <button id="sidebarToggle" class="mr-4 text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h2 class="text-xl font-semibold text-gray-800">Dashboard Overview</h2>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="relative">
+                        <input type="text" placeholder="Search..." class="pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                        <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                    </div>
+                    <div class="relative">
+                        <button class="text-gray-500 hover:text-gray-700">
+                            <i class="fas fa-bell"></i>
+                            <span class="absolute top-0 right-0 h-2 w-2 rounded-full bg-red-500"></span>
+                        </button>
+                    </div>
+                    <div class="flex items-center">
+                        <img src="files/profile.JPG" alt="User" class="h-8 w-8 rounded-full mr-2">
+                        <span class="text-gray-700">Miracle Arokoyo</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Dashboard Content -->
+            <main class="p-6">
+                <!-- Date Range Selector -->
+                <div class="bg-white rounded-lg shadow-sm p-4 mb-6 flex justify-between items-center">
+                    <div>
+                        <h3 class="font-medium text-gray-800">Analytics Period</h3>
+                        <p class="text-sm text-gray-500">Compare with previous period</p>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <button class="px-4 py-2 bg-indigo-100 text-indigo-700 rounded-lg hover:bg-indigo-200">Last 7 days</button>
+                        <button class="px-4 py-2 text-gray-600 rounded-lg hover:bg-gray-100">Last 30 days</button>
+                        <button class="px-4 py-2 text-gray-600 rounded-lg hover:bg-gray-100">Last 90 days</button>
+                        <button class="px-4 py-2 text-gray-600 rounded-lg hover:bg-gray-100">
+                            <i class="fas fa-calendar-alt mr-2"></i>Custom
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Metrics Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+                    <div class="metric-card bg-white rounded-lg shadow-sm p-6 transition duration-300">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-gray-500 text-sm">Total Followers</p>
+                                <h3 class="text-2xl font-bold mt-1">24,568</h3>
+                                <p class="text-green-500 text-sm mt-2 flex items-center">
+                                    <i class="fas fa-arrow-up mr-1"></i> 12.5% from last week
+                                </p>
+                            </div>
+                            <div class="bg-indigo-100 p-3 rounded-full">
+                                <i class="fas fa-users text-indigo-600"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="metric-card bg-white rounded-lg shadow-sm p-6 transition duration-300">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-gray-500 text-sm">Engagement Rate</p>
+                                <h3 class="text-2xl font-bold mt-1">4.8%</h3>
+                                <p class="text-green-500 text-sm mt-2 flex items-center">
+                                    <i class="fas fa-arrow-up mr-1"></i> 1.2% from last week
+                                </p>
+                            </div>
+                            <div class="bg-green-100 p-3 rounded-full">
+                                <i class="fas fa-heart text-green-600"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="metric-card bg-white rounded-lg shadow-sm p-6 transition duration-300">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-gray-500 text-sm">Impressions</p>
+                                <h3 class="text-2xl font-bold mt-1">156,234</h3>
+                                <p class="text-red-500 text-sm mt-2 flex items-center">
+                                    <i class="fas fa-arrow-down mr-1"></i> 3.4% from last week
+                                </p>
+                            </div>
+                            <div class="bg-blue-100 p-3 rounded-full">
+                                <i class="fas fa-eye text-blue-600"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="metric-card bg-white rounded-lg shadow-sm p-6 transition duration-300">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-gray-500 text-sm">New Posts</p>
+                                <h3 class="text-2xl font-bold mt-1">14</h3>
+                                <p class="text-green-500 text-sm mt-2 flex items-center">
+                                    <i class="fas fa-arrow-up mr-1"></i> 40% from last week
+                                </p>
+                            </div>
+                            <div class="bg-purple-100 p-3 rounded-full">
+                                <i class="fas fa-image text-purple-600"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Row -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                    <div class="bg-white rounded-lg shadow-sm p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="font-medium text-gray-800">Follower Growth</h3>
+                            <div class="flex space-x-2">
+                                <button class="px-3 py-1 text-xs bg-indigo-100 text-indigo-700 rounded hover:bg-indigo-200">Instagram</button>
+                                <button class="px-3 py-1 text-xs bg-gray-100 text-gray-600 rounded hover:bg-gray-200">Facebook</button>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="followerChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-sm p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="font-medium text-gray-800">Engagement Rate</h3>
+                            <div class="flex space-x-2">
+                                <button class="px-3 py-1 text-xs bg-indigo-100 text-indigo-700 rounded hover:bg-indigo-200">Posts</button>
+                                <button class="px-3 py-1 text-xs bg-gray-100 text-gray-600 rounded hover:bg-gray-200">Stories</button>
+                                <button class="px-3 py-1 text-xs bg-gray-100 text-gray-600 rounded hover:bg-gray-200">Reels</button>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="engagementChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Content Performance -->
+                <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="font-medium text-gray-800">Top Performing Content</h3>
+                        <button class="px-4 py-2 text-indigo-600 rounded-lg hover:bg-indigo-50">View All</button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Post</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Likes</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Comments</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Shares</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Reach</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <div class="flex-shrink-0 h-10 w-10">
+                                                <img class="h-10 w-10 rounded" src="https://cdn.shopify.com/s/files/1/0272/5298/1896/files/Tile_-_Version_1_480x480.png?v=1621184287" alt="">
+                                            </div>
+                                            <div class="ml-4">
+                                                <div class="text-sm font-medium text-gray-900">Summer Collection Launch</div>
+                                                <div class="text-sm text-gray-500">#summer2025</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                            Post
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">May 15, 2025</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">5,678</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">342</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">1,234</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">24,567</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <div class="flex-shrink-0 h-10 w-10">
+                                                <img class="h-10 w-10 rounded" src="https://images.squarespace-cdn.com/content/v1/5cfe7dc0a7b5d40001d013d9/28dbe866-ccc3-4828-9432-2ba1390bcd99/Behind-the-scenes-Noble-Bison-Production-Denver-video-production-company.jpg" alt="">
+                                            </div>
+                                            <div class="ml-4">
+                                                <div class="text-sm font-medium text-gray-900">Behind the Scenes</div>
+                                                <div class="text-sm text-gray-500">#bts</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-purple-100 text-purple-800">
+                                            Reel
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">May 12, 2025</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">8,912</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">567</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2,345</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">32,456</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <div class="flex-shrink-0 h-10 w-10">
+                                                <img class="h-10 w-10 rounded" src="https://www.promptcloud.com/wp-content/uploads/2022/04/client-reviews.png" alt="">
+                                            </div>
+                                            <div class="ml-4">
+                                                <div class="text-sm font-medium text-gray-900">Customer Spotlight</div>
+                                                <div class="text-sm text-gray-500">#testimonial</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                                            Story
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">May 10, 2025</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">3,456</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">123</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">789</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">18,765</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Audience Demographics -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div class="bg-white rounded-lg shadow-sm p-6 col-span-2">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="font-medium text-gray-800">Audience Demographics</h3>
+                            <div class="flex space-x-2">
+                                <button class="px-3 py-1 text-xs bg-indigo-100 text-indigo-700 rounded hover:bg-indigo-200">Age</button>
+                                <button class="px-3 py-1 text-xs bg-gray-100 text-gray-600 rounded hover:bg-gray-200">Gender</button>
+                                <button class="px-3 py-1 text-xs bg-gray-100 text-gray-600 rounded hover:bg-gray-200">Location</button>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="demographicsChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-sm p-6">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="font-medium text-gray-800">Top Locations</h3>
+                            <button class="px-3 py-1 text-xs bg-gray-100 text-gray-600 rounded hover:bg-gray-200">View All</button>
+                        </div>
+                        <div class="space-y-4">
+                            <div>
+                                <div class="flex justify-between text-sm mb-1">
+                                    <span>United States</span>
+                                    <span class="font-medium">32%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="bg-indigo-600 h-2 rounded-full" style="width: 32%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-sm mb-1">
+                                    <span>United Kingdom</span>
+                                    <span class="font-medium">18%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="bg-indigo-600 h-2 rounded-full" style="width: 18%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-sm mb-1">
+                                    <span>Canada</span>
+                                    <span class="font-medium">12%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="bg-indigo-600 h-2 rounded-full" style="width: 12%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-sm mb-1">
+                                    <span>Australia</span>
+                                    <span class="font-medium">9%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="bg-indigo-600 h-2 rounded-full" style="width: 9%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-sm mb-1">
+                                    <span>Germany</span>
+                                    <span class="font-medium">7%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="bg-indigo-600 h-2 rounded-full" style="width: 7%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // Toggle sidebar
+        document.getElementById('sidebarToggle').addEventListener('click', function() {
+            document.querySelector('.sidebar').classList.toggle('hidden');
+        });
+
+        // Follower Growth Chart
+        const followerCtx = document.getElementById('followerChart').getContext('2d');
+        const followerChart = new Chart(followerCtx, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+                datasets: [{
+                    label: 'Instagram',
+                    data: [12000, 15000, 18000, 20000, 22000, 23500, 24568],
+                    borderColor: '#6366F1',
+                    backgroundColor: 'rgba(99, 102, 241, 0.1)',
+                    tension: 0.3,
+                    fill: true,
+                    borderWidth: 2
+                }, {
+                    label: 'Facebook',
+                    data: [8000, 9500, 11000, 12500, 14000, 15000, 15800],
+                    borderColor: '#3B82F6',
+                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                    tension: 0.3,
+                    fill: true,
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        grid: {
+                            drawBorder: false
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+
+        // Engagement Rate Chart
+        const engagementCtx = document.getElementById('engagementChart').getContext('2d');
+        const engagementChart = new Chart(engagementCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                datasets: [{
+                    label: 'Engagement Rate',
+                    data: [3.2, 4.1, 5.0, 4.8, 5.5, 4.2, 3.9],
+                    backgroundColor: '#10B981',
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.parsed.y + '%';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            drawBorder: false
+                        },
+                        ticks: {
+                            callback: function(value) {
+                                return value + '%';
+                            }
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+
+        // Demographics Chart
+        const demographicsCtx = document.getElementById('demographicsChart').getContext('2d');
+        const demographicsChart = new Chart(demographicsCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['18-24', '25-34', '35-44', '45-54', '55+'],
+                datasets: [{
+                    data: [25, 40, 20, 10, 5],
+                    backgroundColor: [
+                        '#6366F1',
+                        '#8B5CF6',
+                        '#EC4899',
+                        '#F97316',
+                        '#F59E0B'
+                    ],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.parsed + '%';
+                            }
+                        }
+                    }
+                },
+                cutout: '70%'
+            }
+        });
+    </script>
+</body>
+</html>
